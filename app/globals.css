@@ -1033,6 +1033,19 @@ footer { padding: 85px 5.5vw 45px; background: var(--black); color: white; }
 }
 .footer-credit a:hover { color: white; }
 
+.manifesto h2,
+.section-head h2,
+.services-title h2,
+.contact-intro h2,
+.editorial-pick-copy h2,
+.feature-copy h2,
+.impact strong {
+  font-size: clamp(3rem, 4.5vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: .94;
+}
+
 @media (max-width: 1050px) {
   .site-nav { grid-template-columns: 1fr auto; }
   .desktop-nav, .nav-cta { display: none; }
