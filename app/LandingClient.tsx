@@ -51,6 +51,30 @@ const launches = [
     image: assetPath("/images/lanzamiento-aventura-explorar.jpg"),
     href: "https://editorialargenta.com.ar/producto/la-aventura-de-explorar/",
   },
+  {
+    title: "Las vías de la vida",
+    author: "Ricardo Geddo",
+    image: assetPath("/images/vias-vida.jpg"),
+    href: "https://editorialargenta.com.ar/producto/las-vias-de-la-vida/",
+  },
+  {
+    title: "Deuda interna II",
+    author: "Carlos A. Galli",
+    image: assetPath("/images/deuda-interna.jpg"),
+    href: "https://editorialargenta.com.ar/producto/deuda-interna-ii/",
+  },
+  {
+    title: "Charlas del alma",
+    author: "Laura de Silva",
+    image: assetPath("/images/charlas-alma.jpg"),
+    href: "https://editorialargenta.com.ar/producto/charlas-del-alma/",
+  },
+  {
+    title: "La brújula del tiempo",
+    author: "Dasso",
+    image: assetPath("/images/brujula-tiempo.jpg"),
+    href: "https://editorialargenta.com.ar/producto/la-brujula-del-tiempo/",
+  },
 ];
 
 const services = [
@@ -67,21 +91,12 @@ export default function LandingClient() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
-  const [activeLaunch, setActiveLaunch] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const timer = window.setInterval(
       () => setActiveReader((current) => (current + 1) % readers.length),
       5500,
-    );
-    return () => window.clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = window.setInterval(
-      () => setActiveLaunch((current) => (current + 1) % launches.length),
-      4200,
     );
     return () => window.clearInterval(timer);
   }, []);
@@ -261,52 +276,35 @@ export default function LandingClient() {
             <p className="section-tag">Recién llegados</p>
             <h2>Nuevos lanzamientos</h2>
           </div>
-          <div className="launches-controls">
-            <button
-              type="button"
-              onClick={() => setActiveLaunch((activeLaunch - 1 + launches.length) % launches.length)}
-              aria-label="Ver lanzamiento anterior"
-            >
-              ←
-            </button>
-            <span>0{activeLaunch + 1} / 0{launches.length}</span>
-            <button
-              type="button"
-              onClick={() => setActiveLaunch((activeLaunch + 1) % launches.length)}
-              aria-label="Ver lanzamiento siguiente"
-            >
-              →
-            </button>
-          </div>
+          <a href="#catalogo">Ver catálogo completo <span>↗</span></a>
         </div>
         <div className="launches-window">
-          <div
-            className="launches-track"
-            style={{ "--launch-index": activeLaunch } as React.CSSProperties}
-          >
-            {launches.map((launch, index) => (
-              <a
-                className={`launch-card ${index === activeLaunch ? "is-active" : ""}`}
-                href={launch.href}
-                target="_blank"
-                rel="noreferrer"
-                key={launch.title}
-              >
-                <span className="launch-number">0{index + 1}</span>
-                <div className="launch-cover">
-                  <img src={launch.image} alt={`Portada de ${launch.title}`} />
-                </div>
-                <div className="launch-meta">
-                  <span>{launch.author}</span>
-                  <h3>{launch.title}</h3>
-                </div>
-                <i>↗</i>
-              </a>
+          <div className="launches-track">
+            {[0, 1].map((group) => (
+              <div className="launches-group" aria-hidden={group === 1} key={group}>
+                {launches.map((launch, index) => (
+                  <a
+                    className="launch-card"
+                    href={launch.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    tabIndex={group === 1 ? -1 : undefined}
+                    key={`${group}-${launch.title}`}
+                  >
+                    <span className="launch-number">0{index + 1}</span>
+                    <div className="launch-cover">
+                      <img src={launch.image} alt={group === 0 ? `Portada de ${launch.title}` : ""} />
+                    </div>
+                    <div className="launch-meta">
+                      <span>{launch.author}</span>
+                      <h3>{launch.title}</h3>
+                    </div>
+                    <i>↗</i>
+                  </a>
+                ))}
+              </div>
             ))}
           </div>
-        </div>
-        <div className="launches-progress" aria-hidden="true">
-          <i style={{ transform: `scaleX(${(activeLaunch + 1) / launches.length})` }} />
         </div>
       </section>
 
