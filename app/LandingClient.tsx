@@ -237,6 +237,34 @@ export default function LandingClient() {
         </div>
       </section>
 
+      <section className="editorial-pick">
+        <div className="editorial-pick-art" data-reveal>
+          <span className="pick-orbit" aria-hidden="true" />
+          <img
+            src="/images/hacia-pais-3d.png"
+            alt="Libro Hacia el país soñado, de Miguel A. Walsh"
+          />
+        </div>
+        <div className="editorial-pick-copy" data-reveal>
+          <p className="section-tag">Elegido por Argenta</p>
+          <h2>Hacia el país<br />soñado</h2>
+          <p className="pick-author">Miguel A. Walsh</p>
+          <p className="pick-description">
+            Una mirada sobre el desarrollo argentino que transforma el
+            diagnóstico en propuestas. Un libro para discutir el país posible,
+            imaginar su futuro y volver a pensar lo que podemos construir.
+          </p>
+          <a
+            href="https://editorialargenta.com.ar/producto/hacia-el-pais-sonado/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Conocer el libro <span>↗</span>
+          </a>
+        </div>
+        <div className="pick-index" aria-hidden="true">01 / DESTACADO</div>
+      </section>
+
       <section className="catalog" id="catalogo">
         <div className="section-head" data-reveal>
           <div>
@@ -286,7 +314,7 @@ export default function LandingClient() {
           </a>
         </div>
         <div className="feature-reader" data-reveal>
-          <img src="/images/planeta-vida-3d.jpg" alt="Libro Planeta Vida, de José Luis Cesana" />
+          <img src="/images/planeta-vida-transparent.png" alt="Libro Planeta Vida, de José Luis Cesana" />
         </div>
         <div className="feature-word" aria-hidden="true">PLANETA VIDA</div>
       </section>
