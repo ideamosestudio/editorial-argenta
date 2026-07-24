@@ -157,8 +157,7 @@ export default function LandingClient() {
     <main>
       <header className={`site-nav ${menuOpen ? "menu-is-open" : ""} ${navScrolled ? "is-scrolled" : ""}`}>
         <a className="logo" href="#inicio" onClick={closeMenu} aria-label="Editorial Argenta">
-          <span>Editorial</span>
-          <strong>ARGENTA</strong>
+          <img src={assetPath("/logo-editorial-argenta.png")} alt="Argenta Editorial" />
         </a>
         <nav className="desktop-nav" aria-label="Navegación principal">
           <a href="#editorial">Editorial</a>
@@ -499,8 +498,7 @@ export default function LandingClient() {
       <footer>
         <div className="footer-top">
           <a className="logo footer-logo" href="#inicio">
-            <span>Editorial</span>
-            <strong>ARGENTA</strong>
+            <img src={assetPath("/logo-editorial-argenta.png")} alt="Argenta Editorial" />
           </a>
           <h2>Ideas que merecen un libro.</h2>
         </div>
@@ -524,6 +522,12 @@ export default function LandingClient() {
             <small>Legal</small>
             <p>© 2026 Editorial Argenta<br />Todos los derechos reservados.</p>
           </div>
+        </div>
+        <div className="footer-credit">
+          <span>Un desarrollo de</span>
+          <a href="https://www.ideamos.com.ar" target="_blank" rel="noreferrer">
+            Estudio Ideamos
+          </a>
         </div>
       </footer>
     </main>
