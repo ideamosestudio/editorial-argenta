@@ -26,6 +26,33 @@ const books = [
   ["Sol de frío", "Alejandro R. García", assetPath("/images/sol-frio.jpg")],
 ];
 
+const launches = [
+  {
+    title: "Hablemos claro sobre el grooming",
+    author: "Leonardo R. S.",
+    image: assetPath("/images/grooming.jpg"),
+    href: "https://editorialargenta.com.ar/producto/grooming/",
+  },
+  {
+    title: "Progestinaciones",
+    author: "Raquel Fagundez",
+    image: assetPath("/images/lanzamiento-progestinaciones.jpg"),
+    href: "https://editorialargenta.com.ar/producto/progestinaciones/",
+  },
+  {
+    title: "3 Ideas",
+    author: "Carlos Curi",
+    image: assetPath("/images/lanzamiento-3-ideas.jpg"),
+    href: "https://editorialargenta.com.ar/producto/3-ideas/",
+  },
+  {
+    title: "La aventura de explorar",
+    author: "Belén Herrera",
+    image: assetPath("/images/lanzamiento-aventura-explorar.jpg"),
+    href: "https://editorialargenta.com.ar/producto/la-aventura-de-explorar/",
+  },
+];
+
 const services = [
   ["Edición", "Lectura, corrección y decisiones editoriales que fortalecen la obra sin borrar la voz del autor."],
   ["Diseño", "Cubiertas y páginas interiores con identidad, legibilidad y criterio comercial."],
@@ -40,12 +67,21 @@ export default function LandingClient() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const [navScrolled, setNavScrolled] = useState(false);
+  const [activeLaunch, setActiveLaunch] = useState(0);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const timer = window.setInterval(
       () => setActiveReader((current) => (current + 1) % readers.length),
       5500,
+    );
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setInterval(
+      () => setActiveLaunch((current) => (current + 1) % launches.length),
+      4200,
     );
     return () => window.clearInterval(timer);
   }, []);
@@ -162,6 +198,11 @@ export default function LandingClient() {
           style={{ backgroundImage: `url("${assetPath("/hero/library-bg.jpg")}")` }}
         />
         <div className="hero-shade" />
+        <div className="hero-grid" aria-hidden="true" />
+        <div className="hero-seal" aria-hidden="true">
+          <strong>56</strong>
+          <span>años de<br />oficio editorial</span>
+        </div>
         <div className="hero-copy">
           <p className="hero-kicker">Editorial Argenta — fundada en 1970</p>
           <h1>
@@ -211,6 +252,61 @@ export default function LandingClient() {
             ))}
           </div>
           <strong>0{activeReader + 1} / 03</strong>
+        </div>
+      </section>
+
+      <section className="launches" aria-label="Nuevos lanzamientos">
+        <div className="launches-heading">
+          <div>
+            <p className="section-tag">Recién llegados</p>
+            <h2>Nuevos lanzamientos</h2>
+          </div>
+          <div className="launches-controls">
+            <button
+              type="button"
+              onClick={() => setActiveLaunch((activeLaunch - 1 + launches.length) % launches.length)}
+              aria-label="Ver lanzamiento anterior"
+            >
+              ←
+            </button>
+            <span>0{activeLaunch + 1} / 0{launches.length}</span>
+            <button
+              type="button"
+              onClick={() => setActiveLaunch((activeLaunch + 1) % launches.length)}
+              aria-label="Ver lanzamiento siguiente"
+            >
+              →
+            </button>
+          </div>
+        </div>
+        <div className="launches-window">
+          <div
+            className="launches-track"
+            style={{ "--launch-index": activeLaunch } as React.CSSProperties}
+          >
+            {launches.map((launch, index) => (
+              <a
+                className={`launch-card ${index === activeLaunch ? "is-active" : ""}`}
+                href={launch.href}
+                target="_blank"
+                rel="noreferrer"
+                key={launch.title}
+              >
+                <span className="launch-number">0{index + 1}</span>
+                <div className="launch-cover">
+                  <img src={launch.image} alt={`Portada de ${launch.title}`} />
+                </div>
+                <div className="launch-meta">
+                  <span>{launch.author}</span>
+                  <h3>{launch.title}</h3>
+                </div>
+                <i>↗</i>
+              </a>
+            ))}
+          </div>
+        </div>
+        <div className="launches-progress" aria-hidden="true">
+          <i style={{ transform: `scaleX(${(activeLaunch + 1) / launches.length})` }} />
         </div>
       </section>
 
