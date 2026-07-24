@@ -2,25 +2,28 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
+const assetPath = (path: string) =>
+  `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+
 const readers = [
-  { src: "/hero/reader-planeta.png", label: "Planeta Vida" },
-  { src: "/hero/reader-1984.png", label: "1984" },
-  { src: "/hero/reader-batalla.png", label: "El poder de ganar la batalla" },
+  { src: assetPath("/hero/reader-planeta.png"), label: "Planeta Vida" },
+  { src: assetPath("/hero/reader-1984.png"), label: "1984" },
+  { src: assetPath("/hero/reader-batalla.png"), label: "El poder de ganar la batalla" },
 ];
 
 const books = [
-  ["Hacia el país soñado", "Rodolfo Walsh", "/images/hacia-el-pais-sonado.jpg"],
-  ["Hablemos claro sobre el grooming", "Leonardo R. S.", "/images/grooming.jpg"],
-  ["Progestinaciones", "Nora Fagundez", "/images/progestinaciones.jpg"],
-  ["El poder de ganar la batalla", "María José Villarreal", "/images/el-poder.jpg"],
-  ["3 Ideas", "Carlos Curi", "/images/tres-ideas.jpg"],
-  ["Las vías de la vida", "Ricardo Geddo", "/images/vias-vida.jpg"],
-  ["Deuda interna II", "Carlos A. Galli", "/images/deuda-interna.jpg"],
-  ["Charlas del alma", "Laura de Silva", "/images/charlas-alma.jpg"],
-  ["La brújula del tiempo", "Dasso", "/images/brujula-tiempo.jpg"],
-  ["Revisionismo historiográfico", "E. Vilte", "/images/revisionismo.jpg"],
-  ["La topología de la realidad", "J. M. Torres", "/images/topologia.jpg"],
-  ["Sol de frío", "Alejandro R. García", "/images/sol-frio.jpg"],
+  ["Hacia el país soñado", "Rodolfo Walsh", assetPath("/images/hacia-el-pais-sonado.jpg")],
+  ["Hablemos claro sobre el grooming", "Leonardo R. S.", assetPath("/images/grooming.jpg")],
+  ["Progestinaciones", "Nora Fagundez", assetPath("/images/progestinaciones.jpg")],
+  ["El poder de ganar la batalla", "María José Villarreal", assetPath("/images/el-poder.jpg")],
+  ["3 Ideas", "Carlos Curi", assetPath("/images/tres-ideas.jpg")],
+  ["Las vías de la vida", "Ricardo Geddo", assetPath("/images/vias-vida.jpg")],
+  ["Deuda interna II", "Carlos A. Galli", assetPath("/images/deuda-interna.jpg")],
+  ["Charlas del alma", "Laura de Silva", assetPath("/images/charlas-alma.jpg")],
+  ["La brújula del tiempo", "Dasso", assetPath("/images/brujula-tiempo.jpg")],
+  ["Revisionismo historiográfico", "E. Vilte", assetPath("/images/revisionismo.jpg")],
+  ["La topología de la realidad", "J. M. Torres", assetPath("/images/topologia.jpg")],
+  ["Sol de frío", "Alejandro R. García", assetPath("/images/sol-frio.jpg")],
 ];
 
 const services = [
@@ -154,7 +157,10 @@ export default function LandingClient() {
         ref={heroRef}
         onMouseMove={moveHero}
       >
-        <div className="hero-bg" />
+        <div
+          className="hero-bg"
+          style={{ backgroundImage: `url("${assetPath("/hero/library-bg.jpg")}")` }}
+        />
         <div className="hero-shade" />
         <div className="hero-copy">
           <p className="hero-kicker">Editorial Argenta — fundada en 1970</p>
@@ -241,7 +247,7 @@ export default function LandingClient() {
         <div className="editorial-pick-art" data-reveal>
           <span className="pick-orbit" aria-hidden="true" />
           <img
-            src="/images/hacia-pais-3d.png"
+            src={assetPath("/images/hacia-pais-3d.png")}
             alt="Libro Hacia el país soñado, de Miguel A. Walsh"
           />
         </div>
@@ -314,7 +320,7 @@ export default function LandingClient() {
           </a>
         </div>
         <div className="feature-reader" data-reveal>
-          <img src="/images/planeta-vida-transparent.png" alt="Libro Planeta Vida, de José Luis Cesana" />
+          <img src={assetPath("/images/planeta-vida-transparent.png")} alt="Libro Planeta Vida, de José Luis Cesana" />
         </div>
         <div className="feature-word" aria-hidden="true">PLANETA VIDA</div>
       </section>
