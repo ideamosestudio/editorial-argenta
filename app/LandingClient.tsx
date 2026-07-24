@@ -132,8 +132,13 @@ export default function LandingClient() {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    event.currentTarget.style.setProperty("--mouse-x", `${x * 28}px`);
-    event.currentTarget.style.setProperty("--mouse-y", `${y * 18}px`);
+    event.currentTarget.style.setProperty("--mouse-x", `${x * 64}px`);
+    event.currentTarget.style.setProperty("--mouse-y", `${y * 42}px`);
+  }
+
+  function resetHero(event: React.MouseEvent<HTMLElement>) {
+    event.currentTarget.style.setProperty("--mouse-x", "0px");
+    event.currentTarget.style.setProperty("--mouse-y", "0px");
   }
 
   function submitForm(event: FormEvent<HTMLFormElement>) {
@@ -206,6 +211,7 @@ export default function LandingClient() {
         id="inicio"
         ref={heroRef}
         onMouseMove={moveHero}
+        onMouseLeave={resetHero}
       >
         <div
           className="hero-bg"
@@ -216,6 +222,15 @@ export default function LandingClient() {
         <div className="hero-seal" aria-hidden="true">
           <strong>56</strong>
           <span>años de<br />oficio editorial</span>
+        </div>
+        <div className="hero-folio" aria-hidden="true">
+          <span>ARGENTA</span>
+          <i />
+          <span>BUENOS AIRES · 1970</span>
+        </div>
+        <div className="hero-corner" aria-hidden="true">
+          <i />
+          <span>Edición · difusión · estrategia</span>
         </div>
         <div className="hero-copy">
           <p className="hero-kicker">Editorial Argenta — fundada en 1970</p>
@@ -500,7 +515,6 @@ export default function LandingClient() {
           <a className="logo footer-logo" href="#inicio">
             <img src={assetPath("/logo-editorial-argenta.png")} alt="Argenta Editorial" />
           </a>
-          <h2>Ideas que merecen un libro.</h2>
         </div>
         <div className="footer-grid">
           <div>
