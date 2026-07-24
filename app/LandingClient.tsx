@@ -1,0 +1,393 @@
+"use client";
+
+import { FormEvent, useEffect, useRef, useState } from "react";
+
+const readers = [
+  { src: "/hero/reader-planeta.png", label: "Planeta Vida" },
+  { src: "/hero/reader-1984.png", label: "1984" },
+  { src: "/hero/reader-batalla.png", label: "El poder de ganar la batalla" },
+];
+
+const books = [
+  ["Hacia el país soñado", "Rodolfo Walsh", "/images/hacia-el-pais-sonado.jpg"],
+  ["Hablemos claro sobre el grooming", "Leonardo R. S.", "/images/grooming.jpg"],
+  ["Progestinaciones", "Nora Fagundez", "/images/progestinaciones.jpg"],
+  ["El poder de ganar la batalla", "María José Villarreal", "/images/el-poder.jpg"],
+  ["3 Ideas", "Carlos Curi", "/images/tres-ideas.jpg"],
+  ["Las vías de la vida", "Ricardo Geddo", "/images/vias-vida.jpg"],
+  ["Deuda interna II", "Carlos A. Galli", "/images/deuda-interna.jpg"],
+  ["Charlas del alma", "Laura de Silva", "/images/charlas-alma.jpg"],
+  ["La brújula del tiempo", "Dasso", "/images/brujula-tiempo.jpg"],
+  ["Revisionismo historiográfico", "E. Vilte", "/images/revisionismo.jpg"],
+  ["La topología de la realidad", "J. M. Torres", "/images/topologia.jpg"],
+  ["Sol de frío", "Alejandro R. García", "/images/sol-frio.jpg"],
+];
+
+const services = [
+  ["Edición", "Lectura, corrección y decisiones editoriales que fortalecen la obra sin borrar la voz del autor."],
+  ["Diseño", "Cubiertas y páginas interiores con identidad, legibilidad y criterio comercial."],
+  ["Producción", "Impresión digital y offset, tiradas piloto, encuadernación y terminaciones profesionales."],
+  ["Distribución", "Canales tradicionales y alternativos para llevar cada título a sus lectores."],
+  ["Difusión", "Prensa, contenidos y presencia pública para construir una conversación alrededor del libro."],
+  ["Marketing", "Estrategia, posicionamiento y acciones comerciales pensadas para cada proyecto."],
+];
+
+export default function LandingClient() {
+  const [activeReader, setActiveReader] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [sent, setSent] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const timer = window.setInterval(
+      () => setActiveReader((current) => (current + 1) % readers.length),
+      5500,
+    );
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add("is-visible");
+        });
+      },
+      { threshold: 0.14 },
+    );
+    document.querySelectorAll("[data-reveal]").forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  function moveHero(event: React.MouseEvent<HTMLElement>) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width - 0.5;
+    const y = (event.clientY - rect.top) / rect.height - 0.5;
+    event.currentTarget.style.setProperty("--mouse-x", `${x * 12}px`);
+    event.currentTarget.style.setProperty("--mouse-y", `${y * 8}px`);
+  }
+
+  function submitForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") || "");
+    const email = String(data.get("email") || "");
+    const phone = String(data.get("phone") || "");
+    const message = String(data.get("message") || "");
+    const subject = encodeURIComponent(`Consulta editorial de ${name}`);
+    const body = encodeURIComponent(
+      `Nombre: ${name}\nEmail: ${email}\nTeléfono: ${phone}\n\nProyecto:\n${message}`,
+    );
+    setSent(true);
+    window.location.href = `mailto:info@editorialargenta.com?subject=${subject}&body=${body}`;
+  }
+
+  const closeMenu = () => setMenuOpen(false);
+
+  return (
+    <main>
+      <header className={`site-nav ${menuOpen ? "menu-is-open" : ""}`}>
+        <a className="logo" href="#inicio" onClick={closeMenu} aria-label="Editorial Argenta">
+          <span>Editorial</span>
+          <strong>ARGENTA</strong>
+        </a>
+        <nav className="desktop-nav" aria-label="Navegación principal">
+          <a href="#editorial">Editorial</a>
+          <a href="#catalogo">Libros</a>
+          <a href="#servicios">Servicios</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+        <a className="nav-cta" href="#contacto">
+          Publicá tu libro <span>↗</span>
+        </a>
+        <button
+          className="menu-toggle"
+          type="button"
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <i />
+          <i />
+        </button>
+      </header>
+
+      <div className={`mobile-menu ${menuOpen ? "is-open" : ""}`} aria-hidden={!menuOpen}>
+        <div className="mobile-menu-links">
+          {[
+            ["Editorial", "#editorial"],
+            ["Libros", "#catalogo"],
+            ["Servicios", "#servicios"],
+            ["Contacto", "#contacto"],
+          ].map(([label, href], index) => (
+            <a href={href} onClick={closeMenu} key={href}>
+              <small>0{index + 1}</small>
+              {label}
+              <span>↗</span>
+            </a>
+          ))}
+        </div>
+        <div className="mobile-menu-footer">
+          <a href="mailto:info@editorialargenta.com">info@editorialargenta.com</a>
+          <span>Buenos Aires · Argentina</span>
+        </div>
+      </div>
+
+      <section
+        className="hero"
+        id="inicio"
+        ref={heroRef}
+        onMouseMove={moveHero}
+      >
+        <div className="hero-bg" />
+        <div className="hero-shade" />
+        <div className="hero-copy">
+          <p className="hero-kicker">Editorial Argenta — fundada en 1970</p>
+          <h1>
+            Ideas que
+            <br />
+            merecen un <span>libro</span>
+          </h1>
+          <p className="hero-lead">
+            Hacemos realidad proyectos editoriales, desde la edición hasta la
+            difusión y el marketing. ¿Tenés una idea? Escribinos.
+          </p>
+          <div className="hero-actions">
+            <a className="hero-button hero-button-light" href="#catalogo">
+              <span>Ver catálogo</span>
+              <i>↘</i>
+            </a>
+            <a className="hero-button hero-button-line" href="#contacto">
+              <span>Quiero editar mi libro</span>
+              <i>↗</i>
+            </a>
+          </div>
+        </div>
+
+        <div className="reader-stage" aria-live="polite">
+          {readers.map((reader, index) => (
+            <img
+              key={reader.src}
+              src={reader.src}
+              alt={`Lector con el libro ${reader.label}`}
+              className={index === activeReader ? "is-active" : ""}
+            />
+          ))}
+        </div>
+        <div className="reader-controls">
+          <span>Lecturas Argenta</span>
+          <div>
+            {readers.map((reader, index) => (
+              <button
+                type="button"
+                key={reader.src}
+                className={index === activeReader ? "is-active" : ""}
+                onClick={() => setActiveReader(index)}
+                aria-label={`Mostrar ${reader.label}`}
+              >
+                <i />
+              </button>
+            ))}
+          </div>
+          <strong>0{activeReader + 1} / 03</strong>
+        </div>
+      </section>
+
+      <section className="manifesto" id="editorial">
+        <p className="section-tag" data-reveal>01 — La editorial</p>
+        <div className="manifesto-main">
+          <h2 data-reveal>
+            Un libro no se limita
+            <br />
+            a ocupar un estante.
+            <br />
+            <span>Abre un mundo.</span>
+          </h2>
+          <div className="manifesto-copy" data-reveal>
+            <p>
+              Desde 1970 acompañamos autores y obras en todo el recorrido:
+              transformamos manuscritos en libros con identidad, presencia y
+              proyección.
+            </p>
+            <p>
+              Oficio editorial, mirada contemporánea y una estrategia concreta
+              para que cada publicación encuentre a sus lectores.
+            </p>
+            <a href="#servicios">Cómo trabajamos <span>↘</span></a>
+          </div>
+        </div>
+        <div className="manifesto-ticker" aria-hidden="true">
+          <div>EDITAR · DISEÑAR · PRODUCIR · DISTRIBUIR · COMUNICAR ·</div>
+          <div>EDITAR · DISEÑAR · PRODUCIR · DISTRIBUIR · COMUNICAR ·</div>
+        </div>
+      </section>
+
+      <section className="catalog" id="catalogo">
+        <div className="section-head" data-reveal>
+          <div>
+            <p className="section-tag">02 — Catálogo</p>
+            <h2>Doce libros.<br />Doce mundos.</h2>
+          </div>
+          <a href="https://editorialargenta.com.ar/#libreria" target="_blank" rel="noreferrer">
+            Ver todos <span>↗</span>
+          </a>
+        </div>
+        <div className="books-grid">
+          {books.map(([title, author, cover], index) => (
+            <a
+              className="book"
+              href="https://editorialargenta.com.ar/#libreria"
+              target="_blank"
+              rel="noreferrer"
+              key={title}
+              data-reveal
+              style={{ "--delay": `${(index % 3) * 90}ms` } as React.CSSProperties}
+            >
+              <div className="book-cover">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <img src={cover} alt={`Portada de ${title}`} />
+                <i>Ver libro ↗</i>
+              </div>
+              <h3>{title}</h3>
+              <p>{author}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="feature">
+        <div className="feature-bg" />
+        <div className="feature-copy" data-reveal>
+          <p className="section-tag">Lanzamiento destacado</p>
+          <h2>Planeta<br />Vida</h2>
+          <p>
+            Proyecto a cien años, para seres humanos. Una invitación a pensar
+            en grande y a imaginar, juntos, un futuro digno para la vida.
+          </p>
+          <a href="https://editorialargenta.com.ar/producto/planeta-vida/" target="_blank" rel="noreferrer">
+            Descubrir el libro <span>↗</span>
+          </a>
+        </div>
+        <div className="feature-reader" data-reveal>
+          <img src="/hero/reader-planeta.png" alt="Lectora con el libro Planeta Vida" />
+        </div>
+        <div className="feature-word" aria-hidden="true">PLANETA VIDA</div>
+      </section>
+
+      <section className="services" id="servicios">
+        <div className="services-title" data-reveal>
+          <p className="section-tag">03 — Servicios</p>
+          <h2>Del manuscrito<br />a los lectores.</h2>
+        </div>
+        <div className="services-grid">
+          {services.map(([title, copy], index) => (
+            <article key={title} data-reveal>
+              <span>0{index + 1}</span>
+              <div>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </div>
+              <i>↗</i>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="impact">
+        <div data-reveal>
+          <strong>56</strong>
+          <span>años de trayectoria</span>
+        </div>
+        <div data-reveal>
+          <strong>1.730</strong>
+          <span>libros editados</span>
+        </div>
+        <div data-reveal>
+          <strong>6.570</strong>
+          <span>puntos de venta</span>
+        </div>
+      </section>
+
+      <section className="contact" id="contacto">
+        <div className="contact-intro" data-reveal>
+          <p className="section-tag">04 — Contacto</p>
+          <h2>
+            Tu libro puede
+            <br />
+            empezar <span>hoy.</span>
+          </h2>
+          <p>
+            Contanos en qué etapa está tu proyecto. Nuestro equipo te responderá
+            para pensar el próximo paso.
+          </p>
+        </div>
+        <form onSubmit={submitForm} data-reveal>
+          <label>
+            <span>Nombre y apellido</span>
+            <input name="name" required autoComplete="name" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input name="email" type="email" required autoComplete="email" />
+          </label>
+          <label>
+            <span>Teléfono</span>
+            <input name="phone" type="tel" autoComplete="tel" />
+          </label>
+          <label className="full-field">
+            <span>Contanos sobre tu proyecto</span>
+            <textarea name="message" rows={4} required />
+          </label>
+          <button type="submit">
+            <span>{sent ? "Mensaje preparado" : "Enviar consulta"}</span>
+            <i>{sent ? "✓" : "↗"}</i>
+          </button>
+          {sent && (
+            <p className="form-note">
+              Se abrió tu aplicación de correo. Si no la ves, escribinos a{" "}
+              <a href="mailto:info@editorialargenta.com">info@editorialargenta.com</a>.
+            </p>
+          )}
+        </form>
+      </section>
+
+      <footer>
+        <div className="footer-top">
+          <a className="logo footer-logo" href="#inicio">
+            <span>Editorial</span>
+            <strong>ARGENTA</strong>
+          </a>
+          <h2>Ideas que merecen un libro.</h2>
+        </div>
+        <div className="footer-grid">
+          <div>
+            <small>Contacto</small>
+            <a href="mailto:info@editorialargenta.com">info@editorialargenta.com</a>
+            <a href="tel:+541144914593">+54 11 4491 4593</a>
+          </div>
+          <div>
+            <small>Estudio</small>
+            <p>Av. Corrientes 1250, 3º F<br />Buenos Aires, Argentina</p>
+          </div>
+          <div>
+            <small>Navegación</small>
+            <a href="#editorial">Editorial</a>
+            <a href="#catalogo">Libros</a>
+            <a href="#servicios">Servicios</a>
+          </div>
+          <div>
+            <small>Legal</small>
+            <p>© 2026 Editorial Argenta<br />Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
+}
