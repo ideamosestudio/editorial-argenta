@@ -36,6 +36,7 @@ export default function LandingClient() {
   const [activeReader, setActiveReader] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [navScrolled, setNavScrolled] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -66,12 +67,19 @@ export default function LandingClient() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const updateNav = () => setNavScrolled(window.scrollY > 48);
+    updateNav();
+    window.addEventListener("scroll", updateNav, { passive: true });
+    return () => window.removeEventListener("scroll", updateNav);
+  }, []);
+
   function moveHero(event: React.MouseEvent<HTMLElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    event.currentTarget.style.setProperty("--mouse-x", `${x * 12}px`);
-    event.currentTarget.style.setProperty("--mouse-y", `${y * 8}px`);
+    event.currentTarget.style.setProperty("--mouse-x", `${x * 28}px`);
+    event.currentTarget.style.setProperty("--mouse-y", `${y * 18}px`);
   }
 
   function submitForm(event: FormEvent<HTMLFormElement>) {
@@ -93,7 +101,7 @@ export default function LandingClient() {
 
   return (
     <main>
-      <header className={`site-nav ${menuOpen ? "menu-is-open" : ""}`}>
+      <header className={`site-nav ${menuOpen ? "menu-is-open" : ""} ${navScrolled ? "is-scrolled" : ""}`}>
         <a className="logo" href="#inicio" onClick={closeMenu} aria-label="Editorial Argenta">
           <span>Editorial</span>
           <strong>ARGENTA</strong>
@@ -233,7 +241,7 @@ export default function LandingClient() {
         <div className="section-head" data-reveal>
           <div>
             <p className="section-tag">02 — Catálogo</p>
-            <h2>Doce libros.<br />Doce mundos.</h2>
+            <h2>Conocé nuestro<br />catálogo.</h2>
           </div>
           <a href="https://editorialargenta.com.ar/#libreria" target="_blank" rel="noreferrer">
             Ver todos <span>↗</span>
@@ -268,15 +276,17 @@ export default function LandingClient() {
           <p className="section-tag">Lanzamiento destacado</p>
           <h2>Planeta<br />Vida</h2>
           <p>
-            Proyecto a cien años, para seres humanos. Una invitación a pensar
-            en grande y a imaginar, juntos, un futuro digno para la vida.
+            José Luis Cesana propone un cambio radical y pacífico de los
+            paradigmas del modelo social vigente. Un ensayo crítico y optimista,
+            basado en hechos, que invita a tomar conciencia de la importancia
+            de la vida y a construir otra realidad posible.
           </p>
           <a href="https://editorialargenta.com.ar/producto/planeta-vida/" target="_blank" rel="noreferrer">
             Descubrir el libro <span>↗</span>
           </a>
         </div>
         <div className="feature-reader" data-reveal>
-          <img src="/hero/reader-planeta.png" alt="Lectora con el libro Planeta Vida" />
+          <img src="/images/planeta-vida-3d.jpg" alt="Libro Planeta Vida, de José Luis Cesana" />
         </div>
         <div className="feature-word" aria-hidden="true">PLANETA VIDA</div>
       </section>
