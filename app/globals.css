@@ -1167,3 +1167,14 @@ footer { padding: 85px 5.5vw 45px; background: var(--black); color: white; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Center the mobile hero without changing desktop or form layouts. */
+@media (max-width: 767px) {
+  .hero-copy{text-align:center}
+  .hero-copy h1,.hero-lead{margin-inline:auto}
+  .hero-kicker{justify-content:center}
+  .hero-actions{align-items:center;justify-content:center;margin-inline:auto}
+  .hero-button{justify-content:center;min-height:44px}
+
+  .hero-copy{width:100%;padding-inline:6%}.hero-actions{flex-wrap:wrap}
+}
